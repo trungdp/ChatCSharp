@@ -31,9 +31,39 @@ namespace ChatRealTime.DTO
             this.Messages = messages;
         }
 
-        public int ID { get => iD; set => iD = value; }
-        public string Name { get => name; set => name = value; }
-        public List<int> UserIDs { get => userIDs; set => userIDs = value; }
-        public List<int> Messages { get => messages; set => messages = value; }
+        public int ID { 
+            get{
+                return this.iD;
+            }
+            set{
+                this.iD = value;
+            }
+        }
+        public string Name {
+            get{
+                return this.name;
+            }
+            set{
+                this.name = value;
+            }
+        }
+        public List<int> UserIDs { 
+            get{
+                return this.userIDs;
+            }
+            set{
+                this.userIDs = value;
+            }
+        }
+        public List<int> Messages {
+            get
+            {
+                return this.messages;
+            }
+            set
+            {
+                this.messages = value;
+            }
+        }
     }
 }

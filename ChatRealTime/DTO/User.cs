@@ -20,10 +20,40 @@ namespace ChatRealTime.DTO
         private string pass;
         private UserStatus status;
 
-        public int ID { get => iD; set => iD = value; }
-        public string Name { get => name; set => name = value; }
-        internal UserStatus Status { get => status; set => status = value; }
-        public string Pass { get => pass; set => pass = value; }
+        public int ID { 
+            get{
+                return this.iD;
+            }
+            set{
+                this.iD = value;
+            }
+        }
+        public string Name { 
+            get{
+                return this.name;
+            }
+            set{
+                this.name = value;
+            }
+        }
+        internal UserStatus Status {
+            get{
+                return this.status;
+            }
+            set{
+                this.status = value;
+            }
+        }
+        public string Pass {
+            get
+            {
+                return this.pass;
+            }
+            set
+            {
+                this.pass = value;
+            }
+        }
 
         public User(int id, string name,string pass, UserStatus status)
         {
@@ -37,7 +67,7 @@ namespace ChatRealTime.DTO
         {
             this.ID = (int)row["id"];
             this.Name = row["name"].ToString();
-            this.pass = row["pass"].ToString();
+            this.Pass = row["pass"].ToString();
             this.Status = (UserStatus)row["status"];
         }
     }

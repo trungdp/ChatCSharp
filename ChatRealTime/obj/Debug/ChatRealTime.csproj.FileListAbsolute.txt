@@ -10,3 +10,6 @@ C:/Users/411/Desktop/ChatRealTime/ChatRealTime/obj/Debug/ChatRealTime.exe
 C:/Users/411/Desktop/ChatRealTime/ChatRealTime/obj/Debug/ChatRealTime.pdb
 /Users/trs/Desktop/ChatRealTime/ChatRealTime/obj/Debug/ChatRealTime.exe
 /Users/trs/Desktop/ChatRealTime/ChatRealTime/obj/Debug/ChatRealTime.pdb
+E:\Study\LapTrinhMang\ChatCSharp\ChatRealTime\bin\Debug\ChatRealTime.exe.config
+E:\Study\LapTrinhMang\ChatCSharp\ChatRealTime\obj\Debug\ChatRealTime.exe
+E:\Study\LapTrinhMang\ChatCSharp\ChatRealTime\obj\Debug\ChatRealTime.pdb
