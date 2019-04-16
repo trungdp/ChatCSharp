@@ -1,0 +1,12 @@
+C:/Users/411/Desktop/ChatRealTime/ChatRealTime/obj/Debug/ChatRealTime.csprojAssemblyReference.cache
+C:/Users/411/Desktop/ChatRealTime/ChatRealTime/obj/Debug/ChatRealTime.Login.resources
+C:/Users/411/Desktop/ChatRealTime/ChatRealTime/obj/Debug/ChatRealTime.Properties.Resources.resources
+C:/Users/411/Desktop/ChatRealTime/ChatRealTime/obj/Debug/ChatRealTime.csproj.GenerateResource.cache
+C:/Users/411/Desktop/ChatRealTime/ChatRealTime/obj/Debug/ChatRealTime.csproj.CoreCompileInputs.cache
+C:/Users/411/Desktop/ChatRealTime/ChatRealTime/bin/Debug/ChatRealTime.exe.config
+C:/Users/411/Desktop/ChatRealTime/ChatRealTime/bin/Debug/ChatRealTime.exe
+C:/Users/411/Desktop/ChatRealTime/ChatRealTime/bin/Debug/ChatRealTime.pdb
+C:/Users/411/Desktop/ChatRealTime/ChatRealTime/obj/Debug/ChatRealTime.exe
+C:/Users/411/Desktop/ChatRealTime/ChatRealTime/obj/Debug/ChatRealTime.pdb
+/Users/trs/Desktop/ChatRealTime/ChatRealTime/obj/Debug/ChatRealTime.exe
+/Users/trs/Desktop/ChatRealTime/ChatRealTime/obj/Debug/ChatRealTime.pdb
