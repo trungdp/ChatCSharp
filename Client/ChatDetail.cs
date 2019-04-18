@@ -27,8 +27,6 @@ namespace Client
             this.lbxMessage.Items.Add(message);
         }
 
-        
-
         private void btnSend_Click(object sender, EventArgs e)
         {
             clientManager.SendData(this.tbMessage.Text);

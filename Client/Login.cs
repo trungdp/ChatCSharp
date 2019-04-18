@@ -29,7 +29,8 @@ namespace Client
 
         private void signupButton_Click(object sender, EventArgs e)
         {
-
+            SignUp signupForm = new SignUp();
+            signupForm.ShowDialog();
         }
     }
 }

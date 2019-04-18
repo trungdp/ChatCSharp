@@ -17,7 +17,7 @@ namespace Server
             get { return serverIP; }
             set { this.serverIP = value; }
         }
-        
+
         public int Port
         {
             get { return this.port; }
@@ -76,19 +76,23 @@ namespace Server
         private void ReceiveData(IAsyncResult ia)
         {
             Socket s = (Socket)ia.AsyncState;
-            try {
+            try
+            {
                 byteReceive = s.EndReceive(ia);
-            } catch
+            }
+            catch
             {
                 this.Close();
                 SetDataFunction("Client ngat ket noi");
                 this.Listen();
                 return;
             }
-            if (byteReceive == 0) {
+            if (byteReceive == 0)
+            {
                 Close();
                 SetDataFunction("Clien dong ket noi");
-            } else
+            }
+            else
             {
                 stringReceive = Encoding.ASCII.GetString(buff, 0, byteReceive);
                 SetDataFunction(stringReceive);

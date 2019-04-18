@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.label4 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.tbxConfirm = new System.Windows.Forms.TextBox();
@@ -40,12 +41,21 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.tbxName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(191, 5);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(85, 24);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Đăng ký";
             // 
             // panel1
             // 
@@ -54,10 +64,10 @@
             this.panel1.Controls.Add(this.btnSignUp);
             this.panel1.Controls.Add(this.panel3);
             this.panel1.Controls.Add(this.panel2);
-            this.panel1.Location = new System.Drawing.Point(12, 33);
+            this.panel1.Location = new System.Drawing.Point(12, 32);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(450, 182);
-            this.panel1.TabIndex = 3;
+            this.panel1.TabIndex = 5;
             // 
             // panel4
             // 
@@ -168,21 +178,11 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Tên đăng nhập: ";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(191, 6);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(85, 24);
-            this.label4.TabIndex = 4;
-            this.label4.Text = "Đăng ký";
-            // 
             // SignUp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(473, 227);
+            this.ClientSize = new System.Drawing.Size(471, 223);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.panel1);
             this.Name = "SignUp";
@@ -201,7 +201,11 @@
 
         #endregion
 
+        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.TextBox tbxConfirm;
+        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Button btnSignUp;
         private System.Windows.Forms.Panel panel3;
@@ -210,9 +214,5 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TextBox tbxName;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.TextBox tbxConfirm;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
     }
 }

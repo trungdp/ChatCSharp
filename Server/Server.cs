@@ -13,7 +13,7 @@ namespace Server
 {
     public partial class Server : Form
     {
-        ServerManager serverManager = new ServerManager(IPAddress.Any,5000);
+        ServerManager serverManager = new ServerManager(IPAddress.Any, 5000);
         public Server()
         {
             InitializeComponent();

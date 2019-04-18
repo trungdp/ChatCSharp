@@ -38,9 +38,10 @@
             this.btnDisconnect.Location = new System.Drawing.Point(388, 252);
             this.btnDisconnect.Name = "btnDisconnect";
             this.btnDisconnect.Size = new System.Drawing.Size(106, 34);
-            this.btnDisconnect.TabIndex = 5;
+            this.btnDisconnect.TabIndex = 7;
             this.btnDisconnect.Text = "Disconnect";
             this.btnDisconnect.UseVisualStyleBackColor = true;
+            this.btnDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
             // 
             // clbxClient
             // 
@@ -48,17 +49,16 @@
             this.clbxClient.Location = new System.Drawing.Point(12, 12);
             this.clbxClient.Name = "clbxClient";
             this.clbxClient.Size = new System.Drawing.Size(483, 229);
-            this.clbxClient.TabIndex = 3;
+            this.clbxClient.TabIndex = 6;
             // 
             // Disconnect
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(508, 295);
+            this.ClientSize = new System.Drawing.Size(505, 294);
             this.Controls.Add(this.btnDisconnect);
             this.Controls.Add(this.clbxClient);
             this.Name = "Disconnect";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Disconnect";
             this.ResumeLayout(false);
 

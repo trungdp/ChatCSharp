@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{66BBB373-0E7F-4249-9678-AC0936CCA1FF}</ProjectGuid>
+    <ProjectGuid>{08682FC0-38DB-42D6-ABD2-E153172C371E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Client</RootNamespace>
     <AssemblyName>Client</AssemblyName>
@@ -46,12 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChatDetail.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ChatDetail.Designer.cs">
-      <DependentUpon>ChatDetail.cs</DependentUpon>
-    </Compile>
     <Compile Include="ClientManager.cs" />
     <Compile Include="DAO\IMessage.cs" />
     <Compile Include="DAO\TextMessage.cs" />
@@ -59,6 +53,12 @@
     <Compile Include="DTO\Conversation.cs" />
     <Compile Include="DTO\DataProvider.cs" />
     <Compile Include="DTO\User.cs" />
+    <Compile Include="ChatDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChatDetail.Designer.cs">
+      <DependentUpon>ChatDetail.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
     </Compile>

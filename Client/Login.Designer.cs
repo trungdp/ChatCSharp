@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.label4 = new System.Windows.Forms.Label();
+            this.signupButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnExit = new System.Windows.Forms.Button();
             this.btnLogin = new System.Windows.Forms.Button();
@@ -37,12 +39,30 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.tbxName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.signupButton = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(189, 6);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(112, 24);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Đăng nhập";
+            // 
+            // signupButton
+            // 
+            this.signupButton.Location = new System.Drawing.Point(394, 6);
+            this.signupButton.Name = "signupButton";
+            this.signupButton.Size = new System.Drawing.Size(62, 23);
+            this.signupButton.TabIndex = 7;
+            this.signupButton.Text = "Đăng ký";
+            this.signupButton.UseVisualStyleBackColor = true;
+            this.signupButton.Click += new System.EventHandler(this.signupButton_Click);
             // 
             // panel1
             // 
@@ -53,7 +73,7 @@
             this.panel1.Location = new System.Drawing.Point(12, 35);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(450, 127);
-            this.panel1.TabIndex = 2;
+            this.panel1.TabIndex = 6;
             // 
             // btnExit
             // 
@@ -135,33 +155,11 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Tên đăng nhập: ";
             // 
-            // signupButton
-            // 
-            this.signupButton.Location = new System.Drawing.Point(394, 6);
-            this.signupButton.Name = "signupButton";
-            this.signupButton.Size = new System.Drawing.Size(62, 23);
-            this.signupButton.TabIndex = 4;
-            this.signupButton.Text = "Đăng ký";
-            this.signupButton.UseVisualStyleBackColor = true;
-            this.signupButton.Click += new System.EventHandler(this.signupButton_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(189, 6);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(112, 24);
-            this.label4.TabIndex = 5;
-            this.label4.Text = "Đăng nhập";
-            // 
             // Login
             // 
-            this.AcceptButton = this.btnLogin;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnExit;
-            this.ClientSize = new System.Drawing.Size(474, 174);
+            this.ClientSize = new System.Drawing.Size(474, 173);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.signupButton);
             this.Controls.Add(this.panel1);
@@ -179,6 +177,8 @@
 
         #endregion
 
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button signupButton;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Button btnLogin;
@@ -188,7 +188,5 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TextBox tbxName;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button signupButton;
-        private System.Windows.Forms.Label label4;
     }
 }
