@@ -41,6 +41,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.tbxName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.lblError = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -59,6 +60,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.lblError);
             this.panel1.Controls.Add(this.panel4);
             this.panel1.Controls.Add(this.btnExit);
             this.panel1.Controls.Add(this.btnSignUp);
@@ -66,7 +68,7 @@
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Location = new System.Drawing.Point(12, 32);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(450, 182);
+            this.panel1.Size = new System.Drawing.Size(450, 197);
             this.panel1.TabIndex = 5;
             // 
             // panel4
@@ -85,7 +87,6 @@
             this.tbxConfirm.Name = "tbxConfirm";
             this.tbxConfirm.Size = new System.Drawing.Size(281, 26);
             this.tbxConfirm.TabIndex = 2;
-            this.tbxConfirm.Text = "1";
             this.tbxConfirm.UseSystemPasswordChar = true;
             // 
             // label3
@@ -102,7 +103,7 @@
             // 
             this.btnExit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExit.Location = new System.Drawing.Point(306, 141);
+            this.btnExit.Location = new System.Drawing.Point(306, 164);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(140, 31);
             this.btnExit.TabIndex = 4;
@@ -113,7 +114,7 @@
             // btnSignUp
             // 
             this.btnSignUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSignUp.Location = new System.Drawing.Point(163, 141);
+            this.btnSignUp.Location = new System.Drawing.Point(163, 164);
             this.btnSignUp.Name = "btnSignUp";
             this.btnSignUp.Size = new System.Drawing.Size(137, 31);
             this.btnSignUp.TabIndex = 3;
@@ -137,7 +138,6 @@
             this.tbxPassword.Name = "tbxPassword";
             this.tbxPassword.Size = new System.Drawing.Size(281, 26);
             this.tbxPassword.TabIndex = 2;
-            this.tbxPassword.Text = "1";
             this.tbxPassword.UseSystemPasswordChar = true;
             // 
             // label2
@@ -166,7 +166,6 @@
             this.tbxName.Name = "tbxName";
             this.tbxName.Size = new System.Drawing.Size(281, 26);
             this.tbxName.TabIndex = 1;
-            this.tbxName.Text = "trung";
             // 
             // label1
             // 
@@ -178,16 +177,28 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Tên đăng nhập: ";
             // 
+            // lblError
+            // 
+            this.lblError.AutoSize = true;
+            this.lblError.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblError.ForeColor = System.Drawing.Color.Red;
+            this.lblError.Location = new System.Drawing.Point(7, 138);
+            this.lblError.Name = "lblError";
+            this.lblError.Size = new System.Drawing.Size(0, 15);
+            this.lblError.TabIndex = 5;
+            // 
             // SignUp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(471, 223);
+            this.ClientSize = new System.Drawing.Size(471, 241);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.panel1);
             this.Name = "SignUp";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SignUp";
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             this.panel3.ResumeLayout(false);
@@ -214,5 +225,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TextBox tbxName;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblError;
     }
 }

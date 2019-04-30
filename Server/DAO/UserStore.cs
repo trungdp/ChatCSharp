@@ -31,15 +31,9 @@ namespace ChatRealTime.DAO
 
         public bool invalidUser(string userName, string pass)
         {
-            string query = "USP_IsInvalidAccount @UserName , @pass ";
-            DataTable data = DataProvider.Instance.ExcuteQuery(query, new object[] { userName, pass });
+            string query1 = "USP_IsInvalidAccount @UserName , @pass ";
+            DataTable data = DataProvider.Instance.ExcuteQuery(query1, new object[] { userName, pass });
             return data.Rows.Count > 0;
-        }
-
-        public void addUser(string userName, string pass)
-        {
-            string query = "USP_AddAccount @UserName , @pass ";
-            DataProvider.Instance.ExcuteNunQuery(query, new object[] { userName, pass});
         }
     }
 }

@@ -39,6 +39,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.tbxName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.lblError = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -66,20 +67,21 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.lblError);
             this.panel1.Controls.Add(this.btnExit);
             this.panel1.Controls.Add(this.btnLogin);
             this.panel1.Controls.Add(this.panel3);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Location = new System.Drawing.Point(12, 35);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(450, 127);
+            this.panel1.Size = new System.Drawing.Size(450, 144);
             this.panel1.TabIndex = 6;
             // 
             // btnExit
             // 
             this.btnExit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExit.Location = new System.Drawing.Point(317, 92);
+            this.btnExit.Location = new System.Drawing.Point(317, 110);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(128, 31);
             this.btnExit.TabIndex = 4;
@@ -90,7 +92,7 @@
             // btnLogin
             // 
             this.btnLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLogin.Location = new System.Drawing.Point(181, 92);
+            this.btnLogin.Location = new System.Drawing.Point(181, 110);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(130, 31);
             this.btnLogin.TabIndex = 3;
@@ -114,7 +116,7 @@
             this.tbxPassword.Name = "tbxPassword";
             this.tbxPassword.Size = new System.Drawing.Size(298, 26);
             this.tbxPassword.TabIndex = 2;
-            this.tbxPassword.Text = "1";
+            this.tbxPassword.Text = "abc123";
             this.tbxPassword.UseSystemPasswordChar = true;
             // 
             // label2
@@ -155,17 +157,30 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Tên đăng nhập: ";
             // 
+            // lblError
+            // 
+            this.lblError.AutoSize = true;
+            this.lblError.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblError.ForeColor = System.Drawing.Color.Red;
+            this.lblError.Location = new System.Drawing.Point(7, 89);
+            this.lblError.Name = "lblError";
+            this.lblError.Size = new System.Drawing.Size(0, 15);
+            this.lblError.TabIndex = 5;
+            // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(474, 173);
+            this.ClientSize = new System.Drawing.Size(474, 191);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.signupButton);
             this.Controls.Add(this.panel1);
             this.Name = "Login";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Login_FormClosing);
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -188,5 +203,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TextBox tbxName;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblError;
     }
 }

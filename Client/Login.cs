@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChatRealTime.DAO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,20 +18,64 @@ namespace Client
             InitializeComponent();
         }
 
+        #region EVENT
         private void btnLogin_Click(object sender, EventArgs e)
         {
-
+            if (!String.IsNullOrEmpty(checkError())){
+                lblError.Text = checkError();
+            } else
+            {
+                ChatDetail clientForm = new ChatDetail();
+                this.Hide();
+                clientForm.ShowDialog();
+                this.Show();
+            }
         }
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-
+            Application.Exit();
         }
 
         private void signupButton_Click(object sender, EventArgs e)
         {
             SignUp signupForm = new SignUp();
+            this.Hide();
             signupForm.ShowDialog();
+            this.Show();
+            tbxName.Text = "";
+            tbxPassword.Text = "";
         }
+
+
+        private void Login_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (MessageBox.Show("Bạn có thật sự muốn thoát chương trình?", "Thông báo", MessageBoxButtons.OKCancel) != DialogResult.OK)
+            {
+                e.Cancel = true;
+            }
+        }
+        #endregion
+
+        #region UTILS
+        private string checkError()
+        {
+            string name = tbxName.Text;
+            string pass = tbxPassword.Text;
+            if (String.IsNullOrEmpty(name))
+            {
+                return "Tên đăng nhập không được để trống!";
+            }
+            else if (String.IsNullOrEmpty(pass))
+            {
+                return "Mật khẩu không được để trống!";
+            }
+            else if(!UserStore.Instance.invalidUser(name,pass)) {
+                return "Tên đăng nhập hoặc mật khẩu không đúng!";
+            }
+            return null;
+        }
+        #endregion
+
     }
 }

@@ -51,6 +51,7 @@
     <Compile Include="DAO\TextMessage.cs" />
     <Compile Include="DAO\UserStore.cs" />
     <Compile Include="DTO\Conversation.cs" />
+    <Compile Include="DTO\Data.cs" />
     <Compile Include="DTO\DataProvider.cs" />
     <Compile Include="DTO\User.cs" />
     <Compile Include="ChatDetail.cs">
