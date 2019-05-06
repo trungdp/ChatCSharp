@@ -101,13 +101,29 @@
             this.btnSearch.TabIndex = 12;
             this.btnSearch.Text = "search";
             this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.SearchClick);
             // 
             // tbxSearch
             // 
+            this.tbxSearch.AutoCompleteCustomSource.AddRange(new string[] {
+            "asd",
+            "bsd",
+            "bcv",
+            "cde",
+            "dcg",
+            "eet",
+            "fdg",
+            "gve",
+            "hce",
+            "ifr"});
+            this.tbxSearch.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.tbxSearch.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.tbxSearch.Location = new System.Drawing.Point(484, 11);
             this.tbxSearch.Name = "tbxSearch";
             this.tbxSearch.Size = new System.Drawing.Size(128, 20);
             this.tbxSearch.TabIndex = 11;
+            this.tbxSearch.TextChanged += new System.EventHandler(this.OnTextChange);
+            this.tbxSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbxSearch_KeyDown);
             // 
             // lvClient
             // 
@@ -116,6 +132,7 @@
             this.lvClient.Size = new System.Drawing.Size(189, 273);
             this.lvClient.TabIndex = 10;
             this.lvClient.UseCompatibleStateImageBehavior = false;
+            this.lvClient.View = System.Windows.Forms.View.List;
             // 
             // Server
             // 

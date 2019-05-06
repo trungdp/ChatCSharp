@@ -13,6 +13,7 @@ namespace Server
 {
     public partial class Server : Form
     {
+        List<string> data = new List<string>() { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j" };
         ServerManager serverManager = new ServerManager(IPAddress.Any, 5000);
         public Server()
         {
@@ -29,14 +30,23 @@ namespace Server
 
         private void btnMessage_Click(object sender, EventArgs e)
         {
-            SendMessage sendMessageForm = new SendMessage();
+            SendMessage sendMessageForm = new SendMessage(data);
             sendMessageForm.ShowDialog();
+            foreach (string item in sendMessageForm.outputList)
+            {
+                AddLog(item);
+            }
+            AddLog(sendMessageForm.message);
         }
 
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
-            Disconnect disconnectForm = new Disconnect();
+            Disconnect disconnectForm = new Disconnect(data);
             disconnectForm.ShowDialog();
+            foreach (string item in disconnectForm.outputList)
+            {
+                AddLog(item);
+            }
         }
 
         private void cbAllow_CheckedChanged(object sender, EventArgs e)
@@ -49,6 +59,32 @@ namespace Server
             {
                 serverManager.Close();
                 AddLog("Da dong ket noi");
+            }
+        }
+
+        private void SearchClick(object sender, EventArgs e)
+        {
+            lvClient.SelectedItems.Clear();
+            for (int i = lvClient.Items.Count - 1; i >= 0; i--)
+            {
+                if (lvClient.Items[i].ToString().ToLower().Contains(tbxSearch.Text.ToLower()))
+                {
+                    lvClient.Items[i].Selected = true;
+                    lvClient.Select();
+                }
+            }
+        }
+
+        private void OnTextChange(object sender, EventArgs e)
+        {
+        }
+
+        private void tbxSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                lvClient.Items.Add(tbxSearch.Text);
+                tbxSearch.Text = "";
             }
         }
     }
