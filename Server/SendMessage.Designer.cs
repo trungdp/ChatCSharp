@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SendMessage));
             this.btnSend = new System.Windows.Forms.Button();
             this.tbxEnterMessage = new System.Windows.Forms.TextBox();
             this.clbxClient = new System.Windows.Forms.CheckedListBox();
@@ -69,7 +70,9 @@
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.tbxEnterMessage);
             this.Controls.Add(this.clbxClient);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SendMessage";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SendMessage";
             this.ResumeLayout(false);
             this.PerformLayout();

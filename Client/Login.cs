@@ -25,8 +25,9 @@ namespace Client
                 lblError.Text = checkError();
             } else
             {
-                ChatDetail clientForm = new ChatDetail();
                 this.Hide();
+                ChatDetail clientForm = new ChatDetail();
+                clientForm.name = tbxName.Text;
                 clientForm.ShowDialog();
                 this.Show();
             }
@@ -45,15 +46,6 @@ namespace Client
             this.Show();
             tbxName.Text = "";
             tbxPassword.Text = "";
-        }
-
-
-        private void Login_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (MessageBox.Show("Bạn có thật sự muốn thoát chương trình?", "Thông báo", MessageBoxButtons.OKCancel) != DialogResult.OK)
-            {
-                e.Cancel = true;
-            }
         }
         #endregion
 

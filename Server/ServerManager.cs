@@ -12,14 +12,12 @@ namespace Server
     {
         private IPAddress serverIP;
         private int port;
-        public IPAddress ServerIP
-        {
+        public IPAddress ServerIP {
             get { return serverIP; }
             set { this.serverIP = value; }
         }
 
-        public int Port
-        {
+        public int Port  {
             get { return this.port; }
             set { this.port = value; }
         }
@@ -41,25 +39,28 @@ namespace Server
             this.Port = Port;
         }
         //Lắng nghe kết nối
-        public void Listen()
-        {
+        public void Listen() {
             serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             serverEP = new IPEndPoint(ServerIP, Port);
             serverSocket.Bind(serverEP);
             serverSocket.Listen(-1);                        //-1: không giới hạn số lượng client kết nối đến
-            SetDataFunction("Dang cho ket noi");
+            SetDataFunction("Đang chờ kết nối . . .");
             //Bắt đầu chấp nhận Client kết nối đến
-            serverSocket.BeginAccept(new AsyncCallback(AcceptScoket), serverSocket);
+            serverSocket.BeginAccept(new AsyncCallback(AcceptSocket), serverSocket);
         }
         //Hàm callback chấp nhận Client kết nối
-        private void AcceptScoket(IAsyncResult ia)
+        private void AcceptSocket(IAsyncResult ia)
         {
-            Socket s = (Socket)ia.AsyncState;
-            clientSocket = s.EndAccept(ia);
-            string hello = "Hello Client";
-            buff = Encoding.ASCII.GetBytes(hello);
-            SetDataFunction("Client " + clientSocket.RemoteEndPoint.ToString() + " da ket noi");
-            clientSocket.BeginSend(buff, 0, buff.Length, SocketFlags.None, new AsyncCallback(SendData), clientSocket);
+            try {
+                Socket s = (Socket)ia.AsyncState;
+                clientSocket = s.EndAccept(ia);
+                string hello = "Hello Client";
+                buff = Encoding.ASCII.GetBytes(hello);
+                SetDataFunction("Client " + clientSocket.RemoteEndPoint.ToString() + " đã kết nối!");
+                //clientSocket.BeginSend(buff, 0, buff.Length, SocketFlags.None, new AsyncCallback(SendData), clientSocket);
+            } catch (Exception) {
+
+            }
         }
         private void SendData(IAsyncResult ia)
         {
@@ -70,30 +71,28 @@ namespace Server
         }
         public void Close()
         {
-            clientSocket.Close();
-            serverSocket.Close();
+            if (clientSocket != null) {
+                clientSocket.Close();
+            }
+            if (serverSocket != null) {
+                serverSocket.Close();
+            }
         }
         private void ReceiveData(IAsyncResult ia)
         {
             Socket s = (Socket)ia.AsyncState;
-            try
-            {
+            try {
                 byteReceive = s.EndReceive(ia);
-            }
-            catch
-            {
+            } catch {
                 this.Close();
-                SetDataFunction("Client ngat ket noi");
+                SetDataFunction("Client ngắt kết nối");
                 this.Listen();
                 return;
             }
-            if (byteReceive == 0)
-            {
+            if (byteReceive == 0) {
                 Close();
-                SetDataFunction("Clien dong ket noi");
-            }
-            else
-            {
+                SetDataFunction("Clien đóng kết nối");
+            }  else {
                 stringReceive = Encoding.ASCII.GetString(buff, 0, byteReceive);
                 SetDataFunction(stringReceive);
                 //Sau khi Server nhận dữ liệu xong thì bắt đầu gởi dữ liệu xuống cho Client

@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Login));
             this.label4 = new System.Windows.Forms.Label();
             this.signupButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblError = new System.Windows.Forms.Label();
             this.btnExit = new System.Windows.Forms.Button();
             this.btnLogin = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -39,7 +41,6 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.tbxName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.lblError = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -76,6 +77,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(450, 144);
             this.panel1.TabIndex = 6;
+            // 
+            // lblError
+            // 
+            this.lblError.AutoSize = true;
+            this.lblError.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblError.ForeColor = System.Drawing.Color.Red;
+            this.lblError.Location = new System.Drawing.Point(7, 89);
+            this.lblError.Name = "lblError";
+            this.lblError.Size = new System.Drawing.Size(0, 15);
+            this.lblError.TabIndex = 5;
             // 
             // btnExit
             // 
@@ -157,16 +168,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Tên đăng nhập: ";
             // 
-            // lblError
-            // 
-            this.lblError.AutoSize = true;
-            this.lblError.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblError.ForeColor = System.Drawing.Color.Red;
-            this.lblError.Location = new System.Drawing.Point(7, 89);
-            this.lblError.Name = "lblError";
-            this.lblError.Size = new System.Drawing.Size(0, 15);
-            this.lblError.TabIndex = 5;
-            // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -175,10 +176,10 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.signupButton);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Login";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Login_FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel3.ResumeLayout(false);

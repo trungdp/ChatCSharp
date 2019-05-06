@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SignUp));
             this.label4 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblError = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.tbxConfirm = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -41,7 +43,6 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.tbxName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.lblError = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -70,6 +71,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(450, 197);
             this.panel1.TabIndex = 5;
+            // 
+            // lblError
+            // 
+            this.lblError.AutoSize = true;
+            this.lblError.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblError.ForeColor = System.Drawing.Color.Red;
+            this.lblError.Location = new System.Drawing.Point(7, 138);
+            this.lblError.Name = "lblError";
+            this.lblError.Size = new System.Drawing.Size(0, 15);
+            this.lblError.TabIndex = 5;
             // 
             // panel4
             // 
@@ -177,16 +188,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Tên đăng nhập: ";
             // 
-            // lblError
-            // 
-            this.lblError.AutoSize = true;
-            this.lblError.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblError.ForeColor = System.Drawing.Color.Red;
-            this.lblError.Location = new System.Drawing.Point(7, 138);
-            this.lblError.Name = "lblError";
-            this.lblError.Size = new System.Drawing.Size(0, 15);
-            this.lblError.TabIndex = 5;
-            // 
             // SignUp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -194,6 +195,7 @@
             this.ClientSize = new System.Drawing.Size(471, 241);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SignUp";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SignUp";

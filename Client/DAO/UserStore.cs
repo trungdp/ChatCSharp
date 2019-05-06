@@ -41,5 +41,27 @@ namespace ChatRealTime.DAO
             string query = "USP_AddAccount @UserName , @pass ";
             DataProvider.Instance.ExcuteNunQuery(query, new object[] { userName, pass});
         }
+
+        public void updateCurrentUser(string userName)
+        {
+            string query = "USP_UpdateCurrentUser @name ";
+            DataProvider.Instance.ExcuteNunQuery(query, new object[] { userName });
+        }
+
+        public void deleteCurrentUser()
+        {
+            string query = "USP_DeleteCurrentUser ";
+            DataProvider.Instance.ExcuteNunQuery(query, new object[] { });
+        }
+
+        public string getCurrentUser()
+        {
+            string query = "USP_GetCurrentUser ";
+            DataTable data = DataProvider.Instance.ExcuteQuery(query, new object[] { });
+            if (data.Rows.Count > 0) {
+                return data.Rows[0]["userName"].ToString();
+            }
+            return "";
+        }
     }
 }

@@ -28,14 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Server));
             this.lbxLog = new System.Windows.Forms.ListBox();
             this.btnClose = new System.Windows.Forms.Button();
             this.cbAllow = new System.Windows.Forms.CheckBox();
             this.btnDisconnect = new System.Windows.Forms.Button();
             this.btnMessage = new System.Windows.Forms.Button();
-            this.btnSearch = new System.Windows.Forms.Button();
             this.tbxSearch = new System.Windows.Forms.TextBox();
             this.lvClient = new System.Windows.Forms.ListView();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lbxLog
@@ -70,6 +71,7 @@
             this.cbAllow.TabIndex = 15;
             this.cbAllow.Text = "Allow Connect";
             this.cbAllow.UseVisualStyleBackColor = true;
+            this.cbAllow.CheckedChanged += new System.EventHandler(this.cbAllow_CheckedChanged);
             // 
             // btnDisconnect
             // 
@@ -93,21 +95,14 @@
             this.btnMessage.UseVisualStyleBackColor = true;
             this.btnMessage.Click += new System.EventHandler(this.btnMessage_Click);
             // 
-            // btnSearch
-            // 
-            this.btnSearch.Location = new System.Drawing.Point(618, 10);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(54, 21);
-            this.btnSearch.TabIndex = 12;
-            this.btnSearch.Text = "search";
-            this.btnSearch.UseVisualStyleBackColor = true;
-            // 
             // tbxSearch
             // 
-            this.tbxSearch.Location = new System.Drawing.Point(484, 11);
+            this.tbxSearch.Location = new System.Drawing.Point(556, 11);
             this.tbxSearch.Name = "tbxSearch";
-            this.tbxSearch.Size = new System.Drawing.Size(128, 20);
+            this.tbxSearch.Size = new System.Drawing.Size(115, 20);
             this.tbxSearch.TabIndex = 11;
+            this.tbxSearch.TextChanged += new System.EventHandler(this.tbxSearch_TextChanged);
+            this.tbxSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbxSearch_KeyDown);
             // 
             // lvClient
             // 
@@ -116,22 +111,36 @@
             this.lvClient.Size = new System.Drawing.Size(189, 273);
             this.lvClient.TabIndex = 10;
             this.lvClient.UseCompatibleStateImageBehavior = false;
+            this.lvClient.View = System.Windows.Forms.View.List;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(482, 12);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(68, 16);
+            this.label1.TabIndex = 18;
+            this.label1.Text = "Find client";
             // 
             // Server
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(683, 437);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.lbxLog);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.cbAllow);
             this.Controls.Add(this.btnDisconnect);
             this.Controls.Add(this.btnMessage);
-            this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.tbxSearch);
             this.Controls.Add(this.lvClient);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Server";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Server_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -144,9 +153,9 @@
         private System.Windows.Forms.CheckBox cbAllow;
         private System.Windows.Forms.Button btnDisconnect;
         private System.Windows.Forms.Button btnMessage;
-        private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.TextBox tbxSearch;
         private System.Windows.Forms.ListView lvClient;
+        private System.Windows.Forms.Label label1;
     }
 }
 

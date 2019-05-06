@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Disconnect));
             this.btnDisconnect = new System.Windows.Forms.Button();
             this.clbxClient = new System.Windows.Forms.CheckedListBox();
             this.SuspendLayout();
@@ -58,7 +59,9 @@
             this.ClientSize = new System.Drawing.Size(505, 294);
             this.Controls.Add(this.btnDisconnect);
             this.Controls.Add(this.clbxClient);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Disconnect";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Disconnect";
             this.ResumeLayout(false);
 

@@ -4,7 +4,7 @@ go
 use ChatCSharp
 go
 --************************************************************************************
---TABLE: User
+--TABLE: Account
 --************************************************************************************
 create table Account
 (
@@ -46,10 +46,49 @@ END
 GO
 
 --************************************************************************************
---DEMO: User
+--DEMO: Account
 --************************************************************************************
 
 EXEC dbo.USP_AddAccount @name = N'trung' ,@pass = N'abc123'
 EXEC dbo.USP_IsInvalidAccountbool @UserName = N'trung' ,@pass = N'abc123'
-EXEC dbo.USP_GetAccountByUserName @UserName = N'trung' 
+EXEC dbo.USP_GetAccountByUserName @UserName = N'trung'
 
+--************************************************************************************
+--TABLE: User
+--************************************************************************************
+
+create table CurrentUser
+(
+	userName nvarchar(100) primary key,
+	userstatus int not null default 0 --(0: offline, 1: online)
+)
+GO
+
+CREATE PROC USP_UpdateCurrentUser
+@name NVARCHAR(100)
+AS 
+BEGIN
+	INSERT INTO dbo.CurrentUser( userName) VALUES  ( @name)
+END
+GO
+
+CREATE PROC USP_DeleteCurrentUser
+AS 
+BEGIN
+	DELETE FROM CurrentUser
+END
+GO
+
+CREATE PROC USP_GetCurrentUser
+AS 
+BEGIN
+	SELECT * FROM dbo.CurrentUser 
+END
+GO
+
+exec USP_UpdateCurrentUser @name = 'trung'
+go
+exec USP_GetCurrentUser 
+go
+exec USP_DeleteCurrentUser
+go
