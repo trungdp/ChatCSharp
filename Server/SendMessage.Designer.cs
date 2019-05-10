@@ -57,6 +57,8 @@
             // clbxClient
             // 
             this.clbxClient.FormattingEnabled = true;
+            this.clbxClient.Items.AddRange(new object[] {
+            "trung"});
             this.clbxClient.Location = new System.Drawing.Point(12, 12);
             this.clbxClient.Name = "clbxClient";
             this.clbxClient.Size = new System.Drawing.Size(483, 199);
