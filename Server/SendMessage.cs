@@ -25,7 +25,6 @@ namespace Server
         {
             InitializeComponent();
             inputList = input;
-            addItem();
         }
 
         private void btnSend_Click(object sender, EventArgs e)
@@ -46,6 +45,9 @@ namespace Server
             }
         }
 
-
+        private void SendMessage_Shown(object sender, EventArgs e)
+        {
+            addItem();
+        }
     }
 }

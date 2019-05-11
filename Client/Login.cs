@@ -27,7 +27,7 @@ namespace Client
             {
                 this.Hide();
                 ChatDetail clientForm = new ChatDetail();
-                clientForm.name = tbxName.Text;
+                clientForm.setName(tbxName.Text);
                 clientForm.ShowDialog();
                 this.Show();
             }

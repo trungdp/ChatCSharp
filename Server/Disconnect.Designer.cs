@@ -63,6 +63,7 @@
             this.Name = "Disconnect";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Disconnect";
+            this.Shown += new System.EventHandler(this.Disconnect_Shown);
             this.ResumeLayout(false);
 
         }

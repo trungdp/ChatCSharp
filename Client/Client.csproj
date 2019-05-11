@@ -54,12 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientManager.cs" />
-    <Compile Include="DAO\IMessage.cs" />
-    <Compile Include="DAO\TextMessage.cs" />
     <Compile Include="DAO\UserStore.cs" />
-    <Compile Include="DTO\Conversation.cs" />
-    <Compile Include="DTO\Data.cs" />
     <Compile Include="DTO\DataProvider.cs" />
     <Compile Include="DTO\User.cs" />
     <Compile Include="ChatDetail.cs">
@@ -112,12 +107,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{2dbea203-7f7d-4270-a042-b72be7d5b1ac}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon\chat-2-512.ico" />

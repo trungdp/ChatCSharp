@@ -76,6 +76,7 @@
             this.Name = "SendMessage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SendMessage";
+            this.Shown += new System.EventHandler(this.SendMessage_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

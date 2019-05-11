@@ -24,7 +24,11 @@ namespace Client
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
             addTabPage("Home");
-            setupMenuItemEvent();
+            addTabPage("Server");
+            commonSetup();
+            lbName.Text = "Reconnect";
+            lbName.Enabled = true;
+            lbName.ForeColor = Color.Red;
         }
 
         #region VARS
@@ -33,7 +37,6 @@ namespace Client
         string readData = null;
         Thread ctThread;
         public string name = null;
-        //Dictionary<string, Object> nowChatting = new Dictionary<string, Object>();
         List<string> nowChatting = new List<string>();
         List<string> chat = new List<string>();
         List<TabPage> tabList = new List<TabPage>();
@@ -51,10 +54,32 @@ namespace Client
 
 
         #region EVENTS
+        public void RemoveText(object sender, EventArgs e)
+        {
+            if (tbxSearch.Text == "Find friend") {
+                tbxSearch.Text = "";
+            }
+        }
+
+        public void AddText(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(tbxSearch.Text))
+                tbxSearch.Text = "Find friend";
+        }
+
+        private void tbxSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) {
+                if (UserStore.Instance.getAllUserName().Contains(tbxSearch.Text)) {
+                    selectPage(tbxSearch.Text);
+                    tbxSearch.Text = "";
+                }
+            }
+        }
+
         private void mListBox_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add) {
-                // scroll the new item into view   
                 if (currentListbox != null) {
                     currentListbox.TopIndex = currentListbox.Items.Count - 1;
                 }
@@ -65,19 +90,32 @@ namespace Client
         {
             try {
                 if (!tbMessage.Text.Equals("")) {
-                    chat.Add("gChat");
-                    chat.Add(tbMessage.Text);
+                    chat.Clear();
+                    switch (tabCtrl.SelectedTab.Text) {
+                        case "Home":
+                            chat.Add("gChat");
+                            chat.Add(tbMessage.Text);
+                            break;
+                        default:
+                            chat.Add("pChat");
+                            chat.Add(tabCtrl.SelectedTab.Text);
+                            chat.Add(name);
+                            chat.Add(tbMessage.Text);
+                            break;
+                    }
+
                     byte[] outStream = ObjectToByteArray(chat);
 
                     serverStream.Write(outStream, 0, outStream.Length);
                     serverStream.Flush();
                     tbMessage.Text = "";
                     chat.Clear();
-                }
-            } catch (Exception er) {
-                //btnConnect.Enabled = true;
-            }
 
+                    this.currentListbox.Items.Add(tbMessage.Text);
+                }
+            } catch (Exception ) {
+
+            }
         }
 
         private void lbName_Click(object sender, EventArgs e)
@@ -90,44 +128,11 @@ namespace Client
             connect();
         }
 
-        private void btnClr_Click(object sender, EventArgs e)
-        {
-            //lbxMessage.Items.Clear();
-            if (currentListbox != null) {
-                currentListbox.Items.Clear();
-            }
-        }
-
-        private void btnLogout_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
         private void openChatToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //if (lvListName.SelectedIndex != -1) {
-            //    String clientName = listBox1.GetItemText(listBox1.SelectedItem);
-            //    chat.Clear();
-            //    chat.Add("pChat");
-            //    chat.Add(clientName);
-            //    chat.Add(name);
-            //    chat.Add("new");
-
-            //    byte[] outStream = ObjectToByteArray(chat);
-            //    serverStream.Write(outStream, 0, outStream.Length);
-            //    serverStream.Flush();
-
-            //    formPrivate privateChat = new formPrivate(clientName, clientSocket, name);
-            //    nowChatting.Add(clientName);
-            //    privateChat.Text = "Private Chat with " + clientName;
-            //    privateChat.Show();
-            //    chat.Clear();
-            //}
-        }
-
-        private void lvListName_DoubleClick(object sender, EventArgs e)
-        {
-            //ListViewItem item = lvListName.SelectedItems as Track;
+            if (lvListName.SelectedItems.Count > 0 && lvListName.SelectedItems[0].Text != name) {
+                selectPage(lvListName.SelectedItems[0].Text);
+            }
         }
 
         private void tabCtrl_MouseClick(object sender, MouseEventArgs e)
@@ -144,12 +149,54 @@ namespace Client
             removeTabPage(tabCtrl.SelectedTab.Text);
         }
 
+
+        private void lvListName_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right) {
+                if (lvListName.FocusedItem.Bounds.Contains(e.Location )) {
+                    menuTripClient.Show(lvListName, e.X, e.Y);
+                }
+            }
+        }
+
+        private void tabCtrl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabCtrl.SelectedTab.Text == "Server") {
+                tbMessage.Hide();
+                btnSend.Hide();
+            } else {
+                tbMessage.Show();
+                btnSend.Show();
+            }
+        }
+
+        private void ChatDetail_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult dialog = MessageBox.Show("Do you want to exit? ", "Exit", MessageBoxButtons.YesNo);
+            if (dialog == DialogResult.Yes) {
+                try {
+                    ctThread.Abort();
+                    clientSocket.Close();
+                } catch (Exception ee) { }
+
+                Application.ExitThread();
+            } else if (dialog == DialogResult.No) {
+                e.Cancel = true;
+            }
+        }
         #endregion
 
         #region UTILS
-        private void setupMenuItemEvent()
+        private void commonSetup()
         {
             deleteItem.Click += deleteItem_Click;
+            tbxSearch.GotFocus += RemoveText;
+            tbxSearch.LostFocus += AddText;
+            AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+            foreach (string key in UserStore.Instance.getAllUserName()) {
+                collection.Add(key);
+            }
+            tbxSearch.AutoCompleteCustomSource = collection;
         }
 
         private void connect()
@@ -165,8 +212,6 @@ namespace Client
                 byte[] outStream = Encoding.ASCII.GetBytes(name + "$");
                 serverStream.Write(outStream, 0, outStream.Length);
                 serverStream.Flush();
-                //btnConnect.Enabled = false;
-
 
                 ctThread = new Thread(getMessage);
                 ctThread.Start();
@@ -184,6 +229,32 @@ namespace Client
             tab.Controls.Add(listBox);
         }
 
+        private void selectPage(string tabname)
+        {
+            foreach (TabPage page in tabCtrl.TabPages) {
+                if (page.Text == tabname) {
+                    tabCtrl.SelectedTab = page;
+                    return;
+                }
+            }
+            addTabPage(tabname);
+            tabCtrl.SelectTab(tabCtrl.TabPages.Count - 1);
+        }
+
+        private ListBox findListBox(string tabname)
+        {
+            try {
+                foreach (TabPage page in tabCtrl.TabPages) {
+                    if (page.Text == tabname) {
+                        return page.Controls[0] as ListBox;
+                    }
+                }
+                return null;
+            } catch (Exception) {
+                return null;
+            }
+        }
+
         private void removeTabPage(string tabname)
         {
             foreach (TabPage page in tabCtrl.TabPages) {
@@ -193,11 +264,6 @@ namespace Client
                 }
             }
         }
-
-        #endregion
-
-
-
 
         public void setName(String title)
         {
@@ -209,7 +275,7 @@ namespace Client
         {
             this.Invoke((MethodInvoker)delegate {
                 if (currentListbox != null) {
-                    this.currentListbox.Items.Add(">>" + m + Environment.NewLine);
+                    this.currentListbox.Items.Add(">>" + m );
                 }
             });
         }
@@ -256,7 +322,6 @@ namespace Client
                         MessageBox.Show("You've been Disconnected");
                         ctThread.Abort();
                         clientSocket.Close();
-                        //btnConnect.Enabled = true;
                     }
 
                     parts = (List<string>)ByteArrayToObject(inStream);
@@ -266,8 +331,9 @@ namespace Client
                             break;
 
                         case "gChat":
-                            readData = "" + parts[1];
-                            msg();
+                            this.Invoke((MethodInvoker)delegate {
+                                this.findListBox("Home").Items.Add(parts[1]);
+                            });
                             break;
 
                         case "pChat":
@@ -275,25 +341,11 @@ namespace Client
                             break;
                     }
 
-                    if (readData[0].Equals('\0')) {
-                        readData = "Reconnect Again";
-                        msg();
-
-                        this.Invoke((MethodInvoker)delegate // To Write the Received data
-                        {
-                            //btnConnect.Enabled = true;
-                        });
-
-                        ctThread.Abort();
-                        clientSocket.Close();
-                        break;
-                    }
                     chat.Clear();
                 }
             } catch (Exception e) {
                 ctThread.Abort();
                 clientSocket.Close();
-                //btnConnect.Enabled = true;
                 Console.WriteLine(e);
             }
 
@@ -307,36 +359,12 @@ namespace Client
                 updateMessage(readData);
         }
 
-        private void formMain_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            DialogResult dialog = MessageBox.Show("Do you want to exit? ", "Exit", MessageBoxButtons.YesNo);
-            if (dialog == DialogResult.Yes) {
-                try {
-                    ctThread.Abort();
-                    clientSocket.Close();
-                } catch (Exception ee) { }
-
-                Application.ExitThread();
-            } else if (dialog == DialogResult.No) {
-                e.Cancel = true;
-            }
-        }
-
-
         public void managePrivateChat(List<string> parts)
         {
-            this.Invoke((MethodInvoker)delegate // To Write the Received data
+            this.Invoke((MethodInvoker)delegate 
             {
-                //if (parts[3].Equals("new")) {
-                //    formPrivate privateC = new formPrivate(parts[2], clientSocket, name);
-                //    nowChatting.Add(parts[2]);
-                //    privateC.Text = "Private Chat with " + parts[2];
-                //    privateC.Show();
-                //} else {
-                //    if (Application.OpenForms["formPrivate"] != null) {
-                //        (Application.OpenForms["formPrivate"] as formPrivate).setHistory(parts[3]);
-                //    }
-                //}
+                selectPage(parts[2]);
+                updateMessage(parts[3]);
             });
         }
 
@@ -368,17 +396,11 @@ namespace Client
                 bool part1 = s.Client.Poll(10, SelectMode.SelectRead);
                 bool part2 = (s.Available == 0);
                 if (part1 && part2) {
-                    //indicator.BackColor = Color.Red;
                     lbName.Text = "Reconnect";
                     lbName.Enabled = true;
                     lbName.ForeColor = Color.Red;
-                    this.Invoke((MethodInvoker)delegate // cross threads
-                    {
-                        //btnConnect.Enabled = true;
-                    });
                     flag = false;
                 } else {
-                    //indicator.BackColor = Color.Green;
                     lbName.Text = "Conected";
                     lbName.Enabled = false;
                     lbName.ForeColor = Color.Green;
@@ -389,5 +411,9 @@ namespace Client
             }
             return flag;
         }
+
+
+        #endregion
+
     }
 }

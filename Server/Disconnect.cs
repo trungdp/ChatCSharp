@@ -24,7 +24,6 @@ namespace Server
         {
             InitializeComponent();
             inputList = input;
-            addItem();
         }
 
         private void btnDisconnect_Click(object sender, EventArgs e)
@@ -41,6 +40,11 @@ namespace Server
             {
                 clbxClient.Items.Add(item);
             }
+        }
+
+        private void Disconnect_Shown(object sender, EventArgs e)
+        {
+            addItem();
         }
     }
 

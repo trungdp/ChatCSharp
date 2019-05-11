@@ -1,7 +1,9 @@
-﻿using System;
+﻿using ChatRealTime.DAO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -17,8 +19,8 @@ namespace Server
 {
     public partial class Server : Form
     {
-        
 
+        #region VARS
         TcpListener listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 5000);
         TcpClient client;
         String clNo;
@@ -26,79 +28,264 @@ namespace Server
         CancellationTokenSource cancellation = new CancellationTokenSource();
         List<string> chat = new List<string>();
 
+        ListBox currentListbox
+        {
+            get {
+                if (tabCtrl.SelectedTab.Controls.Count > 0) {
+                    return tabCtrl.SelectedTab.Controls[0] as ListBox;
+                } else {
+                    ListBox listBox = new ListBox();
+                    tabCtrl.SelectedTab.Controls.Add(listBox);
+                    return listBox;
+                }
+            }
+        }
+        #endregion 
+
+
         public Server()
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
+            addTabPage("Home");
+            commonSetup();
         }
 
         #region  EVENTS
-
-        private void tbxSearch_TextChanged(object sender, EventArgs e)
+        public void RemoveText(object sender, EventArgs e)
         {
-            if (String.IsNullOrEmpty(tbxSearch.Text)) {
-
-            } else {
-
+            if (tbxSearch.Text == "Find friend") {
+                tbxSearch.Text = "";
             }
+        }
+
+        public void AddText(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(tbxSearch.Text))
+                tbxSearch.Text = "Find friend";
         }
 
         private void Server_Load(object sender, EventArgs e)
         {
             cancellation = new CancellationTokenSource();
             startServer();
-            createFakeClient(new List<string>() { "trung","vu","trinh","thuy","quan"});
         }
+
         private void tbxSearch_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter) {
-
+                if (UserStore.Instance.getAllUserName().Contains(tbxSearch.Text)) {
+                    selectPage(tbxSearch.Text);
+                    tbxSearch.Text = "";
+                }
             }
         }
 
         private void btnMessage_Click(object sender, EventArgs e)
         {
-            SendMessage sendMessageForm = new SendMessage();
-            this.Hide();
-            sendMessageForm.ShowDialog();
-            this.Show();
+            try {
+                SendMessage sendMessageForm = new SendMessage();
+                List<string> parts = new List<string>();
+                foreach (string key in clientList.Keys) {
+                    sendMessageForm.inputList.Add(key);
+                }
+                this.Hide();
+                sendMessageForm.ShowDialog();
+                this.Show();
+                if (sendMessageForm.outputList.Count > 0) {
+                    foreach (string name in sendMessageForm.outputList) {
+                        parts.Add("pChat");
+                        parts.Add(name);
+                        parts.Add("Server");
+                        parts.Add(sendMessageForm.message);
+                        privateChat(parts);
+                    }
+                }
+            } catch (SocketException se) {
+            }
         }
 
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
             Disconnect disconnectForm = new Disconnect();
+            foreach (string key in clientList.Keys) {
+                disconnectForm.inputList.Add(key);
+            }
             this.Hide();
             disconnectForm.ShowDialog();
             this.Show();
-        }
-
-        private void cbAllow_CheckedChanged(object sender, EventArgs e)
-        {
-            if (cbAllow.Checked) {
-                cancellation = new CancellationTokenSource();
-                startServer();
-            } else {
-                try {
-                    listener.Stop();
-                    updateUI("Server Stopped");
-                    foreach (var Item in clientList) {
-                        TcpClient broadcastSocket;
-                        broadcastSocket = (TcpClient)Item.Value;
-                        broadcastSocket.Close();
-                    }
-                } catch (SocketException er) {
-
+            if (disconnectForm.outputList.Count > 0) {
+                foreach (string name in disconnectForm.outputList) {
+                    TcpClient workerSocket = null;
+                    workerSocket = (TcpClient)clientList.FirstOrDefault(x => x.Key == name).Value;
+                    workerSocket.Close();
                 }
             }
         }
+
+        private void disconnectItem_Click(object sender, EventArgs e)
+        {
+            try {
+                TcpClient workerSocket = null;
+                foreach (ListViewItem item in lvClient.SelectedItems) {
+                    workerSocket = null;
+                    workerSocket = (TcpClient)clientList.FirstOrDefault(x => x.Key == item.Text).Value; 
+                    workerSocket.Close();
+                }
+            } catch (SocketException se) {
+            }
+        }
+
+        private void sendMessageItem_Click(object sender, EventArgs e)
+        {
+            SingleMessage form = new SingleMessage();
+            form.ShowDialog();
+            if (!String.IsNullOrEmpty(form.message) && lvClient.SelectedItems.Count > 0) {
+                byte[] byData = ObjectToByteArray(chat);
+                foreach (ListViewItem item in lvClient.SelectedItems) {
+                    List<string> parts = new List<string>();
+                    parts.Add("pChat");
+                    parts.Add(item.Text);
+                    parts.Add("Server");
+                    parts.Add("Server : " + form.message);
+                    privateChat(parts);
+                }
+            }
+        }
+
+        private void lvClient_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right) {
+                if (lvClient.FocusedItem.Bounds.Contains(e.Location)) {
+                    ctxMenuClient.Show(lvClient, e.X, e.Y);
+                }
+            }
+        }
+
+        private void tabCtrl_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right) {
+                ctxMenuHomeTab.Show(tabCtrl, e.X, e.Y);
+            }
+        }
+
+        private void btnAllClient_Click(object sender, EventArgs e)
+        {
+            AllClient allClientForm = new AllClient();
+            foreach (string key in clientList.Keys) {
+                allClientForm.onlineClient.Add(key);
+            }
+            allClientForm.ShowDialog();
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            if (cbAllow.Checked) {
+                try {
+                    listener.Stop();
+                    updateUI("Server Stopped");
+                    foreach (TcpClient item in clientList.Values) {
+                        item.Close();
+                    }
+                    cbAllow.Checked = false;
+                    btnClose.Text = "Start Server";
+                } catch (SocketException er) {
+
+                }
+            } else {
+                startServer();
+                cbAllow.Checked = true;
+                btnClose.Text = "Close Server";
+            }
+        }
+
+        private void tbxHomeMessage_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && !String.IsNullOrEmpty(tbxHomeMessage.Text)) {
+                globalChat(tbxHomeMessage.Text, "Server", true);
+                this.findListBox("Home").Items.Add("Server: " + tbxHomeMessage.Text);
+                ctxMenuHomeTab.Hide();
+            }
+        }
+
+        private void Server_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try {
+                listener.Stop();
+                updateUI("Server Stopped");
+                foreach (TcpClient item in clientList.Values) {
+                    item.Close();
+                }
+                Process.GetCurrentProcess().Kill();
+            } catch (SocketException er) {
+
+            }
+        }
         #endregion
+
+        #region UTILS
+        private void commonSetup()
+        {
+            tbxSearch.GotFocus += RemoveText;
+            tbxSearch.LostFocus += AddText;
+            AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+            foreach (string key in UserStore.Instance.getAllUserName()) {
+                collection.Add(key);
+            }
+            tbxSearch.AutoCompleteCustomSource = collection;
+        }
 
         public void updateUI(String m)
         {
             this.Invoke((MethodInvoker)delegate 
             {
-                this.lbxLog.Items.Add(">>" + m + Environment.NewLine);
+                this.currentListbox.Items.Add(">>" + m );
             });
+        }
+
+        private void addTabPage(string tabname)
+        {
+            TabPage tab = new TabPage(tabname);
+            tabCtrl.TabPages.Add(tab);
+            ListBox listBox = new ListBox();
+            listBox.Dock = DockStyle.Fill;
+            tab.Controls.Add(listBox);
+        }
+
+        private void selectPage(string tabname)
+        {
+            foreach (TabPage page in tabCtrl.TabPages) {
+                if (page.Text == tabname) {
+                    tabCtrl.SelectTab(page);
+                    return;
+                }
+            }
+            addTabPage(tabname);
+            tabCtrl.SelectTab(tabCtrl.TabPages.Count - 1);
+        }
+
+        private ListBox findListBox(string tabname)
+        {
+            try {
+                foreach (TabPage page in tabCtrl.TabPages) {
+                    if (page.Text == tabname) {
+                        return page.Controls[0] as ListBox;
+                    }
+                }
+                return null; 
+            } catch (Exception) {
+                return null;
+            }
+        }
+
+        private void removeTabPage(string tabname)
+        {
+            foreach (TabPage page in tabCtrl.TabPages) {
+                if (page.Text == tabname) {
+                    tabCtrl.TabPages.Remove(page);
+                    break;
+                }
+            }
         }
 
         private ListViewItem createLvItem(string m)
@@ -136,37 +323,33 @@ namespace Server
                 int counter = 0;
                 while (true) {
                     counter++;
-                    //client = await listener.AcceptTcpClientAsync();
                     client = await Task.Run(() => listener.AcceptTcpClientAsync(), cancellation.Token);
-
-                    /* get username */
+                    
                     byte[] name = new byte[50];
-                    NetworkStream stre = client.GetStream(); //Gets The Stream of The Connection
-                    stre.Read(name, 0, name.Length); //Receives Data 
-                    String username = Encoding.ASCII.GetString(name); // Converts Bytes Received to String
+                    NetworkStream stre = client.GetStream(); 
+                    stre.Read(name, 0, name.Length); 
+                    String username = Encoding.ASCII.GetString(name);
                     username = username.Substring(0, username.IndexOf("$"));
-
-                    /* add to dictionary, listbox and send userList  */
+                    
                     clientList.Add(username, client);
                     lvClient.Items.Add(createLvItem(username));
 
-                    updateUI("Connected to user " + username + " - " + client.Client.RemoteEndPoint);
-                    announce(username + " Joined ", username, false);
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        this.findListBox("Home").Items.Add(username + " connected ");
+                    });
+                    globalChat(username + " Joined ", username, false);
 
                     await Task.Delay(1000).ContinueWith(t => sendUsersList());
-
-
                     var c = new Thread(() => ServerReceive(client, username));
                     c.Start();
-
                 }
             } catch (Exception) {
                 listener.Stop();
             }
-
         }
 
-        public void announce(string msg, string uName, bool flag)
+        public void globalChat(string msg, string uName, bool flag)
         {
             try {
                 foreach (var Item in clientList) {
@@ -176,18 +359,13 @@ namespace Server
                     Byte[] broadcastBytes = null;
 
                     if (flag) {
-                        //broadcastBytes = Encoding.ASCII.GetBytes("gChat|*|" + uName + " says : " + msg);
-
                         chat.Add("gChat");
                         chat.Add(uName + " says : " + msg);
                         broadcastBytes = ObjectToByteArray(chat);
                     } else {
-                        //broadcastBytes = Encoding.ASCII.GetBytes("gChat|*|" + msg);
-
                         chat.Add("gChat");
                         chat.Add(msg);
                         broadcastBytes = ObjectToByteArray(chat);
-
                     }
 
                     broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
@@ -234,77 +412,45 @@ namespace Server
                         case "gChat":
                             this.Invoke((MethodInvoker)delegate
                             {
-                                this.lbxLog.Items.Add(username + ": " + parts[1] + Environment.NewLine);
+                                this.currentListbox.Items.Add(username + ": " + parts[1]);
                             });
-
-                            announce(parts[1], username, true);
+                            globalChat(parts[1], username, true);
                             break;
 
                         case "pChat":
-                            privateChat(parts);
+                            if (parts[1] == "Server") {
+                                selectPage(parts[2]);
+                                this.currentListbox.Items.Add(parts[2] + ": " + parts[3]);
+                            } else {
+                                privateChat(parts);
+                            }
                             break;
                     }
-
                     parts.Clear();
                 } catch (Exception r) {
-                    updateUI("Client Disconnected: " + username);
-                    announce("Client Disconnected: " + username + "$", username, false);
+                    this.findListBox("Home").Items.Add(username + " disconnected ");
+                    globalChat("Client Disconnected: " + username + "$", username, false);
                     clientList.Remove(username);
-
-                    this.Invoke((MethodInvoker)delegate {
-                        //listBox1.Items.Remove(username);
-                        lvClient.Items.Remove(getLvItem(username));
-                    });
+                    lvClient.Items.Remove(getLvItem(username));
                     sendUsersList();
                     break;
                 }
             }
         }
 
-        private void Private_Click(object sender, EventArgs e)
-        {
-            //if (listBox1.SelectedIndex != -1) {
-            //    String clientName = listBox1.GetItemText(listBox1.SelectedItem);
-
-            //    chat.Clear();
-            //    chat.Add("gChat");
-            //    chat.Add("Admin : " + inputPrivate.Text);
-
-            //    byte[] byData = ObjectToByteArray(chat);
-            //    TcpClient workerSocket = null;
-            //    workerSocket = (TcpClient)clientList.FirstOrDefault(x => x.Key == clientName).Value; //find the client by username in dictionary
-
-            //    NetworkStream stm = workerSocket.GetStream();
-            //    stm.Write(byData, 0, byData.Length);
-            //    stm.Flush();
-            //    chat.Clear();
-            //}
-        }
-
-        private void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //try {
-            //    TcpClient workerSocket = null;
-
-            //    String clientName = listBox1.GetItemText(listBox1.SelectedItem);
-            //    workerSocket = (TcpClient)clientList.FirstOrDefault(x => x.Key == clientName).Value; //find the client by username in dictionary
-            //    workerSocket.Close();
-
-            //} catch (SocketException se) {
-            //}
-        }
-
         public void sendUsersList()
         {
             try {
                 byte[] userList = new byte[1024];
-                //string[] clist = listBox1.Items.OfType<string>().ToArray();
                 List<string> users = new List<string>();
 
                 users.Add("userList");
-                foreach (ListViewItem item in lvClient.Items) {
-                    users.Add(item.Text);
+                if (lvClient.Items.Count > 0) {
+                    foreach (ListViewItem item in lvClient.Items) {
+                        users.Add(item.Text);
+                    }
                 }
+                
                 userList = ObjectToByteArray(users);
 
                 foreach (var Item in clientList) {
@@ -322,24 +468,18 @@ namespace Server
         private void privateChat(List<string> text)
         {
             try {
-
                 byte[] byData = ObjectToByteArray(text);
-
                 TcpClient workerSocket = null;
-                workerSocket = (TcpClient)clientList.FirstOrDefault(x => x.Key == text[1]).Value; //find the client by username in dictionary
+                workerSocket = (TcpClient)clientList.FirstOrDefault(x => x.Key == text[1]).Value; 
 
                 NetworkStream stm = workerSocket.GetStream();
                 stm.Write(byData, 0, byData.Length);
                 stm.Flush();
-
             } catch (SocketException se) {
+
             }
         }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            lbxLog.TopIndex = lbxLog.Items.Count - 1;
-        }
+        #endregion
 
         
     }
