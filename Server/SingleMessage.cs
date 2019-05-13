@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Server
-{
+{   /// <summary>
+/// Class SingleMessage dùng để gửi tin nhắn cho 1 user.
+/// </summary>
     public partial class SingleMessage : Form
     {
         public string message;

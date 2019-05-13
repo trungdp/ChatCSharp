@@ -10,6 +10,9 @@ using System.Windows.Forms;
 
 namespace Server
 {
+    /// <summary>
+    /// Class Disconnect cho phép chọn và ngắt kết nối một hoặc nhiều client.
+    /// </summary>
     public partial class Disconnect : Form
     {
         public List<string> inputList = new List<string>();
