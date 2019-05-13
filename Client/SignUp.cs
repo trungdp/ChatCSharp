@@ -18,6 +18,12 @@ namespace Client
             InitializeComponent();
         }
         #region EVENT
+        /// <summary>
+        ///  /// sự kiện click vào btnLogin_Click nếu có lỗi thì in lỗi ra ở lblError,
+        /// nếu không có lỗi thì thêm user vào database
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnSignUp_Click(object sender, EventArgs e)
         {
             if (!String.IsNullOrEmpty(checkError()))

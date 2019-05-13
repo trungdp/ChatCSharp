@@ -184,6 +184,13 @@ namespace Client
                 e.Cancel = true;
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            EmojiMenu emojiForm = new EmojiMenu();
+            emojiForm.ShowDialog();
+            tbMessage.Text += emojiForm.result; 
+        }
         #endregion
 
         #region UTILS
@@ -199,16 +206,20 @@ namespace Client
             tbxSearch.AutoCompleteCustomSource = collection;
         }
 
+        /// <summary>
+        /// Hàm connect kết nối với server nếu xảy ra lỗi thì in ra "Server Not Started"
+        /// </summary>
         private void connect()
         {
             clientSocket = new TcpClient();
             try {
+                ///Kết nối tới IP:"127.0.0.1" port 5000
                 clientSocket.Connect("127.0.0.1", 5000);
                 readData = "Connected to Server ";
                 msg();
 
                 serverStream = clientSocket.GetStream();
-
+                // Gửi dữ liệu kết nối
                 byte[] outStream = Encoding.ASCII.GetBytes(name + "$");
                 serverStream.Write(outStream, 0, outStream.Length);
                 serverStream.Flush();
@@ -271,6 +282,10 @@ namespace Client
             name = title;
         }
 
+        /// <summary>
+        /// Hàm updateMessage để thêm tin nhắn vào Listbox hiện tại 
+        /// </summary>
+        /// <param name="m"></param>
         public void updateMessage(String m)
         {
             this.Invoke((MethodInvoker)delegate {
@@ -299,6 +314,10 @@ namespace Client
             return null;
         }
 
+        /// <summary>
+        /// Hàm getUsers lấy ra tên các user trong List rồi thêm vào lvListName
+        /// </summary>
+        /// <param name="parts"></param>
         public void getUsers(List<string> parts)
         {
             this.Invoke((MethodInvoker)delegate {
@@ -309,6 +328,9 @@ namespace Client
             });
         }
 
+        /// <summary>
+        /// Hàm getMessage nhận tin nhắn từ server rồi xử lý
+        /// </summary>
         private void getMessage()
         {
             try {
@@ -317,7 +339,7 @@ namespace Client
                     byte[] inStream = new byte[10025];
                     serverStream.Read(inStream, 0, inStream.Length);
                     List<string> parts = null;
-
+                    // Nếu mất kết nối thì thông báo "You've been Disconnected" rồi đóng kết nối. 
                     if (!SocketConnected(clientSocket)) {
                         MessageBox.Show("You've been Disconnected");
                         ctThread.Abort();
@@ -326,17 +348,17 @@ namespace Client
 
                     parts = (List<string>)ByteArrayToObject(inStream);
                     switch (parts[0]) {
-                        case "userList":
+                        case "userList": // Nếu tin nhắn là userList -> thêm user vào lvListName
                             getUsers(parts);
                             break;
 
-                        case "gChat":
+                        case "gChat": // Nếu tin nhắn là global -> thêm tin nhắn vào tab Home
                             this.Invoke((MethodInvoker)delegate {
                                 this.findListBox("Home").Items.Add(parts[1]);
                             });
                             break;
 
-                        case "pChat":
+                        case "pChat": // Nếu là tin nhắn private gọi hàm managePrivateChat
                             managePrivateChat(parts);
                             break;
                     }
@@ -358,6 +380,11 @@ namespace Client
             else
                 updateMessage(readData);
         }
+        /// <summary>
+        /// Hàm managePrivateChat mở tab của user trong cuộc trò chuyện,
+        /// rồi thêm tin nhắn vào tab đó
+        /// </summary>
+        /// <param name="parts"></param>
 
         public void managePrivateChat(List<string> parts)
         {
@@ -368,7 +395,7 @@ namespace Client
             });
         }
 
-
+        //
         public byte[] ObjectToByteArray(object _Object)
         {
             using (var stream = new MemoryStream()) {
@@ -389,18 +416,23 @@ namespace Client
             }
         }
 
+        /// <summary>
+        /// Hàm SocketConnected trả về trạng thái TCPClient hiện tại
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         bool SocketConnected(TcpClient s) //check whether client is connected server
         {
             bool flag = false;
             try {
                 bool part1 = s.Client.Poll(10, SelectMode.SelectRead);
                 bool part2 = (s.Available == 0);
-                if (part1 && part2) {
-                    lbName.Text = "Reconnect";
+                if (part1 && part2) {// Nếu mất kết nối 
+                    lbName.Text = "Reconnect"; 
                     lbName.Enabled = true;
                     lbName.ForeColor = Color.Red;
                     flag = false;
-                } else {
+                } else {// Nếu kết nối thành công
                     lbName.Text = "Conected";
                     lbName.Enabled = false;
                     lbName.ForeColor = Color.Green;
@@ -415,5 +447,6 @@ namespace Client
 
         #endregion
 
+        
     }
 }

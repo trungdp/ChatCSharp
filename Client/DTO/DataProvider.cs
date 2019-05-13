@@ -8,11 +8,15 @@ using System.Threading.Tasks;
 
 namespace ChatRealTime.DTO
 {
+    /// <summary>
+    /// class DataProvider giúp xử lý các tác vụ với database
+    /// </summary>
     class DataProvider
     {
         private string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ChatCSharp;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True";
         private static DataProvider instance = null;
-
+        // Tạo Singleton cho lớp DataProvider
+        // Singleton biến tĩnh, duy nhất của một lớp 
         internal static DataProvider Instance
         {
             get
@@ -29,6 +33,12 @@ namespace ChatRealTime.DTO
         }
 
         private DataProvider() { }
+        /// <summary>
+        /// Hàm ExcuteQuery thực hiện những câu truy vấn có trả về kết quả là dữ liệu trong bảng
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
         public DataTable ExcuteQuery(string query, object[] parameter = null)
         {
             DataTable data = new DataTable();
@@ -46,6 +56,13 @@ namespace ChatRealTime.DTO
             return data;
         }
 
+        /// <summary>
+        /// Hàm ExcuteNunQuery thực hiện những câu truy vấn không trả về kết quả từ table 
+        /// mà làm thay đổi số dòng của table.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
         public int ExcuteNunQuery(string query, object[] parameter = null)
         {
             int data = 0;
@@ -62,6 +79,13 @@ namespace ChatRealTime.DTO
             return data;
         }
 
+        /// <summary>
+        /// /// Hàm ExcuteScalar thực hiện những câu truy vấn có  trả về kết quả 
+        ///  là các phép đếm.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
         public object ExcuteScalar(string query, object[] parameter = null)
         {
             object data = 0;

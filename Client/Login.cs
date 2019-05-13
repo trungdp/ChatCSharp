@@ -19,6 +19,12 @@ namespace Client
         }
 
         #region EVENT
+        /// <summary>
+        /// sự kiện click vào btnLogin_Click nếu có lỗi thì in lỗi ra ở lblError,
+        /// nếu không có lỗi thì mở form ChatDetail.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnLogin_Click(object sender, EventArgs e)
         {
             if (!String.IsNullOrEmpty(checkError())){
@@ -48,8 +54,16 @@ namespace Client
             tbxPassword.Text = "";
         }
         #endregion
+       
 
         #region UTILS
+        /// <summary>
+        /// hàm checkError trả về một string hoặc null,
+        /// nếu ô tên đăng nhập trống thì trả về lỗi String.IsNullOrEmpty(name),
+        /// nếu ô mật khẩu trống trả về lỗi String.IsNullOrEmpty(pass),
+        /// nếu ô tên đăng nhập hoặc mật khẩu không đúng trả về lỗi UserStore.Instance.invalidUser(name,pass).
+        /// </summary>
+        /// <returns></returns>
         private string checkError()
         {
             string name = tbxName.Text;

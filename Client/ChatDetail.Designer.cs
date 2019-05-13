@@ -41,6 +41,7 @@
             this.openChatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxMenuTripTab = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deleteItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel3.SuspendLayout();
             this.menuTripClient.SuspendLayout();
             this.ctxMenuTripTab.SuspendLayout();
@@ -69,6 +70,7 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.button1);
             this.panel3.Controls.Add(this.tabCtrl);
             this.panel3.Controls.Add(this.lbName);
             this.panel3.Controls.Add(this.tbMessage);
@@ -146,6 +148,16 @@
             this.deleteItem.Size = new System.Drawing.Size(106, 22);
             this.deleteItem.Text = "delete";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(270, 313);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(55, 23);
+            this.button1.TabIndex = 8;
+            this.button1.Text = "Emoji";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // ChatDetail
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -182,6 +194,7 @@
         private System.Windows.Forms.ToolStripMenuItem openChatToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip ctxMenuTripTab;
         private System.Windows.Forms.ToolStripMenuItem deleteItem;
+        private System.Windows.Forms.Button button1;
     }
 }
 

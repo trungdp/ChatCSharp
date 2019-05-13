@@ -63,6 +63,12 @@
     <Compile Include="ChatDetail.Designer.cs">
       <DependentUpon>ChatDetail.cs</DependentUpon>
     </Compile>
+    <Compile Include="EmojiMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmojiMenu.Designer.cs">
+      <DependentUpon>EmojiMenu.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,6 +85,9 @@
     </Compile>
     <EmbeddedResource Include="ChatDetail.resx">
       <DependentUpon>ChatDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmojiMenu.resx">
+      <DependentUpon>EmojiMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
