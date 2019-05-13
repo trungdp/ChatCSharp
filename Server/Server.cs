@@ -17,6 +17,9 @@ using System.Windows.Forms;
 
 namespace Server
 {
+    /// <summary>
+    /// Class server xử lý  yêu cầu từ client và phản hồi.
+    /// </summary>
     public partial class Server : Form
     {
 
@@ -46,7 +49,7 @@ namespace Server
         public Server()
         {
             InitializeComponent();
-            CheckForIllegalCrossThreadCalls = false;
+            CheckForIllegalCrossThreadCalls = false; // Cho phép các thread sử dụng chung tài nguyên.
             addTabPage("Home");
             commonSetup();
         }
@@ -81,6 +84,11 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// Mở ra from SendMessage 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnMessage_Click(object sender, EventArgs e)
         {
             try {
@@ -105,6 +113,8 @@ namespace Server
             }
         }
 
+
+        // Mở ra form Disconnect
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
             Disconnect disconnectForm = new Disconnect();
@@ -235,6 +245,13 @@ namespace Server
             tbxSearch.AutoCompleteCustomSource = collection;
         }
 
+        /// <summary>
+        /// Hàm updateUI(String m) để thêm message text vào listbox hiện tại.
+        /// this.Invoke((MethodInvoker)delegate: đoạn code khởi chạy một thread khác,
+        /// khi có một thread cần dùng tài nguyên thì các thread khác bị "lock" cho tới khi thread kia hoàn thành
+        /// tác vụ ( thread safe )
+        /// </summary>
+        /// <param name="m"></param>
         public void updateUI(String m)
         {
             this.Invoke((MethodInvoker)delegate 
@@ -307,13 +324,9 @@ namespace Server
             return null;
         }
 
-        void createFakeClient(List<string> data)
-        {
-            foreach ( string name in data) {
-                lvClient.Items.Add(createLvItem(name));
-            };
-        }
-
+        /// <summary>
+        /// HÀm startServer cho phép server lắng nghe kết nối, nếu xảy ra lỗi thì dừng server
+        /// </summary>
         public async void startServer()
         {
             listener.Start();
@@ -323,41 +336,48 @@ namespace Server
                 int counter = 0;
                 while (true) {
                     counter++;
+                    // Gán TCPClient vừa kết nối cho biến client.
                     client = await Task.Run(() => listener.AcceptTcpClientAsync(), cancellation.Token);
-                    
+                    // Đọc dữ liệu gửi lên.
                     byte[] name = new byte[50];
                     NetworkStream stre = client.GetStream(); 
                     stre.Read(name, 0, name.Length); 
                     String username = Encoding.ASCII.GetString(name);
                     username = username.Substring(0, username.IndexOf("$"));
-                    
+                    // Thêm biến client vào dictionary clientList.
                     clientList.Add(username, client);
                     lvClient.Items.Add(createLvItem(username));
-
+                    // Gửi tin nhắn xuống các client.
                     this.Invoke((MethodInvoker)delegate
                     {
                         this.findListBox("Home").Items.Add(username + " connected ");
                     });
                     globalChat(username + " Joined ", username, false);
-
+                    // Gửi UserList xuống các client.
                     await Task.Delay(1000).ContinueWith(t => sendUsersList());
                     var c = new Thread(() => ServerReceive(client, username));
                     c.Start();
                 }
             } catch (Exception) {
-                listener.Stop();
+                listener.Stop();// Dừng server.
             }
         }
 
+        /// <summary>
+        /// Hàm globalChat gửi tin nhắn xuống toàn bộ client.
+        /// </summary>
+        /// <param name="msg"> tin nhắn </param>
+        /// <param name="uName"> người gửi </param>
+        /// <param name="flag"> nếu là tin nhắn của mình -> flag = false </param>
         public void globalChat(string msg, string uName, bool flag)
         {
             try {
-                foreach (var Item in clientList) {
+                foreach (var Item in clientList) {// duyệt tất cả client.
                     TcpClient broadcastSocket;
                     broadcastSocket = (TcpClient)Item.Value;
                     NetworkStream broadcastStream = broadcastSocket.GetStream();
                     Byte[] broadcastBytes = null;
-
+                    // Lấy tin nhắn từ client và thiết lập tin nhắn cho tất cả client.
                     if (flag) {
                         chat.Add("gChat");
                         chat.Add(uName + " says : " + msg);
@@ -367,7 +387,7 @@ namespace Server
                         chat.Add(msg);
                         broadcastBytes = ObjectToByteArray(chat);
                     }
-
+                    // Gửi tin nhắn
                     broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
                     broadcastStream.Flush();
                     chat.Clear();
@@ -377,7 +397,11 @@ namespace Server
             }
         }  //end broadcast function
 
-
+        /// <summary>
+        /// Chuyển đổi mảng byte[] thành object
+        /// </summary>
+        /// <param name="arrBytes"></param>
+        /// <returns></returns>
         public Object ByteArrayToObject(byte[] arrBytes)
         {
             using (var memStream = new MemoryStream()) {
@@ -388,7 +412,11 @@ namespace Server
                 return obj;
             }
         }
-
+        /// <summary>
+        /// Chuyển object thảnh mảng byte[]
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public byte[] ObjectToByteArray(Object obj)
         {
             BinaryFormatter bf = new BinaryFormatter();
@@ -398,6 +426,8 @@ namespace Server
             }
         }
 
+        // Hàm ServerReceive để nhận tin nhắn từ client và phản hồi lại,
+        // Nếu xảy ra lỗi thì đóng TCPClient
         public void ServerReceive(TcpClient clientn, String username)
         {
             byte[] data = new byte[1000];
@@ -409,7 +439,8 @@ namespace Server
                     List<string> parts = (List<string>)ByteArrayToObject(data);
 
                     switch (parts[0]) {
-                        case "gChat":
+                        case "gChat":// nếu là tin nhắn global thì thêm vào tab hiện tại 
+                                     // và gửi cho tất cả các client
                             this.Invoke((MethodInvoker)delegate
                             {
                                 this.currentListbox.Items.Add(username + ": " + parts[1]);
@@ -417,17 +448,20 @@ namespace Server
                             globalChat(parts[1], username, true);
                             break;
 
+                            // nếu là private chat thì mở tab tương ứng. 
                         case "pChat":
                             if (parts[1] == "Server") {
                                 selectPage(parts[2]);
                                 this.currentListbox.Items.Add(parts[2] + ": " + parts[3]);
                             } else {
+                                // nếu người nhận không phải server thì chuyển tiếp tới client nhận.
                                 privateChat(parts);
                             }
                             break;
                     }
                     parts.Clear();
                 } catch (Exception r) {
+                    // Nếu xảy ra lỗi thì đóng TCPClient
                     this.findListBox("Home").Items.Add(username + " disconnected ");
                     globalChat("Client Disconnected: " + username + "$", username, false);
                     clientList.Remove(username);
@@ -438,6 +472,10 @@ namespace Server
             }
         }
 
+
+        /// <summary>
+        /// Gửi list các user đang online cho các client
+        /// </summary>
         public void sendUsersList()
         {
             try {
@@ -465,11 +503,18 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// Gửi tin nhắn riêng tư tới client nhận tin nhắn.
+        /// </summary>
+        /// <param name="text"></param>
         private void privateChat(List<string> text)
         {
             try {
                 byte[] byData = ObjectToByteArray(text);
                 TcpClient workerSocket = null;
+                // Lấy ra TCPClient nhận tin nhắn từ dictionary clientList
+                // Dictionary clientList gồm 1 cặp key-value 
+                // Key: tên user, value: TCPClient tương ứng của user đó.
                 workerSocket = (TcpClient)clientList.FirstOrDefault(x => x.Key == text[1]).Value; 
 
                 NetworkStream stm = workerSocket.GetStream();

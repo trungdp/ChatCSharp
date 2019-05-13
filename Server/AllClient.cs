@@ -11,6 +11,9 @@ using System.Windows.Forms;
 
 namespace Server
 {
+    /// <summary>
+    /// Form AllClient cho phép hiển thị các client đang online hoặc offline.
+    /// </summary>
     public partial class AllClient : Form
     {
         private List<string> allClient = new List<string>();

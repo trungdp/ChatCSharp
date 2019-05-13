@@ -10,6 +10,10 @@ using System.Windows.Forms;
 
 namespace Server
 {
+    /// <summary>
+    /// Class SendMessage cho phép nhập tin nhắn và chọn một hoặc 
+    /// nhiều client để gửi.
+    /// </summary>
     public partial class SendMessage : Form
     {
         public List<string> inputList = new List<string>();
