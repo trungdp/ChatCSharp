@@ -33,6 +33,7 @@
             this.tbxSearch = new System.Windows.Forms.TextBox();
             this.lvListName = new System.Windows.Forms.ListView();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.tabCtrl = new System.Windows.Forms.TabControl();
             this.lbName = new System.Windows.Forms.Label();
             this.tbMessage = new System.Windows.Forms.TextBox();
@@ -41,7 +42,8 @@
             this.openChatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxMenuTripTab = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deleteItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnFile = new System.Windows.Forms.Button();
+            this.dialogFile = new System.Windows.Forms.OpenFileDialog();
             this.panel3.SuspendLayout();
             this.menuTripClient.SuspendLayout();
             this.ctxMenuTripTab.SuspendLayout();
@@ -70,6 +72,7 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.btnFile);
             this.panel3.Controls.Add(this.button1);
             this.panel3.Controls.Add(this.tabCtrl);
             this.panel3.Controls.Add(this.lbName);
@@ -79,6 +82,16 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(328, 383);
             this.panel3.TabIndex = 11;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(270, 313);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(55, 23);
+            this.button1.TabIndex = 8;
+            this.button1.Text = "Emoji";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // tabCtrl
             // 
@@ -148,15 +161,15 @@
             this.deleteItem.Size = new System.Drawing.Size(106, 22);
             this.deleteItem.Text = "delete";
             // 
-            // button1
+            // btnFile
             // 
-            this.button1.Location = new System.Drawing.Point(270, 313);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(55, 23);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "Emoji";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnFile.Location = new System.Drawing.Point(209, 313);
+            this.btnFile.Name = "btnFile";
+            this.btnFile.Size = new System.Drawing.Size(55, 23);
+            this.btnFile.TabIndex = 9;
+            this.btnFile.Text = "File";
+            this.btnFile.UseVisualStyleBackColor = true;
+            this.btnFile.Click += new System.EventHandler(this.btnFile_Click);
             // 
             // ChatDetail
             // 
@@ -195,6 +208,8 @@
         private System.Windows.Forms.ContextMenuStrip ctxMenuTripTab;
         private System.Windows.Forms.ToolStripMenuItem deleteItem;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnFile;
+        private System.Windows.Forms.OpenFileDialog dialogFile;
     }
 }
 

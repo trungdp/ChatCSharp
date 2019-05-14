@@ -53,5 +53,18 @@ namespace Server
         {
             addItem();
         }
+
+        private void btnEmoji_Click(object sender, EventArgs e)
+        {
+            EmojiMenu emojiForm = new EmojiMenu();
+            emojiForm.ShowDialog();
+            tbxEnterMessage.Text += emojiForm.result;
+        }
+
+        private void btnFile_Click(object sender, EventArgs e)
+        {
+            dialogFile.ShowDialog();
+            tbxEnterMessage.Text += dialogFile.FileName;
+        }
     }
 }

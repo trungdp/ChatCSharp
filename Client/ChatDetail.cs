@@ -29,6 +29,7 @@ namespace Client
             lbName.Text = "Reconnect";
             lbName.Enabled = true;
             lbName.ForeColor = Color.Red;
+            
         }
 
         #region VARS
@@ -108,10 +109,9 @@ namespace Client
 
                     serverStream.Write(outStream, 0, outStream.Length);
                     serverStream.Flush();
+                    this.currentListbox.Items.Add(tbMessage.Text);
                     tbMessage.Text = "";
                     chat.Clear();
-
-                    this.currentListbox.Items.Add(tbMessage.Text);
                 }
             } catch (Exception ) {
 
@@ -189,7 +189,13 @@ namespace Client
         {
             EmojiMenu emojiForm = new EmojiMenu();
             emojiForm.ShowDialog();
-            tbMessage.Text += emojiForm.result; 
+            tbMessage.Text += emojiForm.result;
+        }
+
+        private void btnFile_Click(object sender, EventArgs e)
+        {
+            dialogFile.ShowDialog();
+            tbMessage.Text += dialogFile.FileName;
         }
         #endregion
 
@@ -445,8 +451,7 @@ namespace Client
         }
 
 
-        #endregion
 
-        
+        #endregion
     }
 }

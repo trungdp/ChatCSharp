@@ -54,8 +54,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAO\MessageStore.cs" />
     <Compile Include="DAO\UserStore.cs" />
     <Compile Include="DTO\DataProvider.cs" />
+    <Compile Include="DTO\MessageOffline.cs" />
     <Compile Include="DTO\User.cs" />
     <Compile Include="ChatDetail.cs">
       <SubType>Form</SubType>

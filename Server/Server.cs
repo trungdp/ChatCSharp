@@ -1,4 +1,6 @@
 ﻿using ChatRealTime.DAO;
+using Server.DAO;
+using Server.DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -94,7 +96,7 @@ namespace Server
             try {
                 SendMessage sendMessageForm = new SendMessage();
                 List<string> parts = new List<string>();
-                foreach (string key in clientList.Keys) {
+                foreach (string key in UserStore.Instance.getAllUserName()) {
                     sendMessageForm.inputList.Add(key);
                 }
                 this.Hide();
@@ -102,11 +104,15 @@ namespace Server
                 this.Show();
                 if (sendMessageForm.outputList.Count > 0) {
                     foreach (string name in sendMessageForm.outputList) {
-                        parts.Add("pChat");
-                        parts.Add(name);
-                        parts.Add("Server");
-                        parts.Add(sendMessageForm.message);
-                        privateChat(parts);
+                        if (clientList.Keys.Contains(name)) {
+                            parts.Add("pChat");
+                            parts.Add(name);
+                            parts.Add("Server");
+                            parts.Add(sendMessageForm.message);
+                            privateChat(parts);
+                        } else {
+                            MessageStore.Instance.addMessage(name,sendMessageForm.message,"Server");
+                        }
                     }
                 }
             } catch (SocketException se) {
@@ -353,6 +359,7 @@ namespace Server
                         this.findListBox("Home").Items.Add(username + " connected ");
                     });
                     globalChat(username + " Joined ", username, false);
+                    checkOfflineMessage(username);
                     // Gửi UserList xuống các client.
                     await Task.Delay(1000).ContinueWith(t => sendUsersList());
                     var c = new Thread(() => ServerReceive(client, username));
@@ -361,6 +368,24 @@ namespace Server
             } catch (Exception) {
                 listener.Stop();// Dừng server.
             }
+        }
+
+        private void checkOfflineMessage(string name)
+        {
+            List<MessageOffline> messages = new List<MessageOffline>();
+            List<string> parts = new List<string>();
+            messages = MessageStore.Instance.getMessageByName(name);
+            if (messages.Count > 0) {
+                foreach (MessageOffline message in messages) {
+                    parts.Add("pChat");
+                    parts.Add(message.Name);
+                    parts.Add(message.Sender);
+                    parts.Add(message.Message);
+                    privateChat(parts);
+                    parts.Clear();
+                }
+            }
+            MessageStore.Instance.deleteMessage(name);
         }
 
         /// <summary>
@@ -455,7 +480,12 @@ namespace Server
                                 this.currentListbox.Items.Add(parts[2] + ": " + parts[3]);
                             } else {
                                 // nếu người nhận không phải server thì chuyển tiếp tới client nhận.
-                                privateChat(parts);
+                                if (clientList.Keys.Contains(parts[1])) {
+                                    privateChat(parts);
+                                }
+                                else {
+                                    MessageStore.Instance.addMessage(parts[1],parts[3],parts[2]);
+                                }
                             }
                             break;
                     }
